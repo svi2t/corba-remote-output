@@ -122,7 +122,7 @@ Example::_objref_Echo::_ptrToObjRef(const char* id)
 // Code for Example::Echo::echoChar
 
 // Proxy call descriptor class. Mangled signature:
-//  _cstring_i_cunsigned_plong
+//  _cunsigned_plong_i_cunsigned_plong
 class _0RL_cd_1f03eabd1a63181c_00000000
   : public omniCallDescriptor
 {
@@ -143,7 +143,7 @@ public:
   static const char* const _user_exns[];
 
   ::CORBA::ULong arg_0;
-  ::CORBA::String_var result;
+  ::CORBA::ULong result;
 };
 
 void _0RL_cd_1f03eabd1a63181c_00000000::marshalArguments(cdrStream& _n)
@@ -160,13 +160,13 @@ void _0RL_cd_1f03eabd1a63181c_00000000::unmarshalArguments(cdrStream& _n)
 
 void _0RL_cd_1f03eabd1a63181c_00000000::marshalReturnedValues(cdrStream& _n)
 {
-  _n.marshalString(result,0);
+  result >>= _n;
 
 }
 
 void _0RL_cd_1f03eabd1a63181c_00000000::unmarshalReturnedValues(cdrStream& _n)
 {
-  result = _n.unmarshalString(0);
+  (::CORBA::ULong&)result <<= _n;
 
 }
 
@@ -185,13 +185,13 @@ _0RL_lcfn_1f03eabd1a63181c_10000000(omniCallDescriptor* cd, omniServant* svnt)
 
 }
 
-char* Example::_objref_Echo::echoChar(::CORBA::ULong mesg)
+::CORBA::ULong Example::_objref_Echo::echoChar(::CORBA::ULong mesg)
 {
   _0RL_cd_1f03eabd1a63181c_00000000 _call_desc(_0RL_lcfn_1f03eabd1a63181c_10000000, "echoChar", 9);
   _call_desc.arg_0 = mesg;
 
   _invoke(_call_desc);
-  return _call_desc.result._retn();
+  return _call_desc.result;
 
 
 }

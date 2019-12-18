@@ -124,7 +124,7 @@ _CORBA_MODULE_BEG
   {
   public:
     // IDL operations
-    char* echoChar(::CORBA::ULong mesg);
+    ::CORBA::ULong echoChar(::CORBA::ULong mesg);
 
     // Constructors
     inline _objref_Echo()  { _PR_setobj(0); }  // nil
@@ -159,7 +159,7 @@ _CORBA_MODULE_BEG
   public:
     virtual ~_impl_Echo();
 
-    virtual char* echoChar(::CORBA::ULong mesg) = 0;
+    virtual ::CORBA::ULong echoChar(::CORBA::ULong mesg) = 0;
     
   public:  // Really protected, workaround for xlC
     virtual _CORBA_Boolean _dispatch(omniCallHandle&);
