@@ -124,7 +124,7 @@ _CORBA_MODULE_BEG
   {
   public:
     // IDL operations
-    ::CORBA::Short setCodecForServer(::CORBA::Long codec);
+    ::CORBA::Short setRemoteCodec(::CORBA::Long codec);
     ::CORBA::Short echoChar(::CORBA::ULong mesg);
 
     // Constructors
@@ -160,7 +160,7 @@ _CORBA_MODULE_BEG
   public:
     virtual ~_impl_Echo();
 
-    virtual ::CORBA::Short setCodecForServer(::CORBA::Long codec) = 0;
+    virtual ::CORBA::Short setRemoteCodec(::CORBA::Long codec) = 0;
     virtual ::CORBA::Short echoChar(::CORBA::ULong mesg) = 0;
     
   public:  // Really protected, workaround for xlC

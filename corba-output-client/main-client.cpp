@@ -4,20 +4,19 @@
 #include <omniORB4/Naming.hh>
 #include "../remote-print.hh"
 #include <QDebug>
+#include <QTextCodec>
+#include "../qaux.h"
+
 
 int main(int argc, char *argv[])
 {
   QCoreApplication a(argc, argv);
-  setlocale(LC_CTYPE, "rus");
+  globalSetLocale();
+
 
   try
   {
     CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
-
-    qDebug() << argv[2];
-
-
-    // Get a reference to the Naming Service
     CORBA::Object_var rootContextObj =
         orb->resolve_initial_references("NameService");
     CosNaming::NamingContext_var nc =
@@ -28,49 +27,40 @@ int main(int argc, char *argv[])
     name[0].id = CORBA::string_dup("echo_s");
     name[0].kind = CORBA::string_dup("");
     CORBA::Object_var managerObj = nc->resolve(name);
-    // Narrow the previous object to obtain the correct type
-    //::Example::Echo manager =
-//        ::Example::_narrow(managerObj.in());
-    ::Example::Echo_var manager = ::Example::Echo::_narrow(managerObj.in());
 
- //    // Narrow the previous object to obtain the correct type
- //    ::CaesarAlgorithm_var manager =
- //        ::CaesarAlgorithm::_narrow(managerObj.in()
-    // -------
+    ::Example::Echo_var remoteServer = ::Example::Echo::_narrow(managerObj.in());
 
+    if (CORBA::is_nil(remoteServer))
+    {
+      qWarning() << "Can't narrow reference." << endl;
+      return 1;
+    }
+    short res = 88;
 
-      if (CORBA::is_nil(manager))
-      {
-         qWarning() << "Can't narrow reference." << endl;
-         return 1;
-      }
+    remoteServer->setRemoteCodec(QTextCodec::codecForLocale()->mibEnum());
+    res = remoteServer->echoChar(static_cast<unsigned int>('e'));
 
-
-    unsigned int res = 88;
-
-    res = manager->echoChar(static_cast<unsigned int>('e'));
-
-    qWarning() << res;
-
-
-
-
-    //hello(echoref);
     orb->destroy();
+
+    //QTimer::
+    return a.exec();
   }
   catch (CORBA::TRANSIENT&)
   {
-    qWarning() << "Caught system exception TRANSIENT -- unable to contact the "
-         << "server." << "\n";
+    qWarning() << toLocalCodec("Caught system exception TRANSIENT - unable to contact the server \n");
   }
   catch (CORBA::SystemException& ex)
   {
-    qWarning() << "Caught a CORBA::" << ex._name() << "\n";
+    qWarning() << toLocalCodec("Caught a CORBA::") << ex._name() << "\n";
   }
   catch (CORBA::Exception& ex)
   {
-    qWarning() << "Caught CORBA::Exception: " << ex._name() << "\n";
+    qWarning() << toLocalCodec("Caught CORBA::Exception: ") << ex._name() << "\n";
   }
-  return 0;
+  catch (...)
+  {
+    qWarning() << toLocalCodec("Что-то пошло не так...\n");
+  }
 
+  return 1;
 }

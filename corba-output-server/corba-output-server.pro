@@ -17,7 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main-server.cpp \
     ../remote-printSK.cc \
-    server.cpp
+    outputserver.cpp \
+    ../qaux.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -26,6 +27,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ../remote-print.hh \
-    server.h
+    outputserver.h \
+    ../qaux.h
 
 LIBS += -lomnithread -lomniORB4
