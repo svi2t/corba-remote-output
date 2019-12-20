@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
 
     CosNaming::Name name;
     name.length(1);
-    name[0].id = (const char *) "echo_s";
-    name[0].kind = (const char *) "";
+    name[0].id = CORBA::string_dup("echo_s");
+    name[0].kind = CORBA::string_dup("");
     CORBA::Object_var managerObj = nc->resolve(name);
     // Narrow the previous object to obtain the correct type
     //::Example::Echo manager =
@@ -39,15 +39,16 @@ int main(int argc, char *argv[])
     // -------
 
 
-       if (CORBA::is_nil(manager))
+      if (CORBA::is_nil(manager))
       {
-           qWarning() << "Can't narrow reference." << endl;
+         qWarning() << "Can't narrow reference." << endl;
          return 1;
       }
 
 
     unsigned int res = 88;
-    res = manager->echoChar(56);
+
+    res = manager->echoChar(static_cast<unsigned int>('e'));
 
     qWarning() << res;
 

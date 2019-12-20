@@ -21,14 +21,15 @@ int main(int argc, char *argv[])
 //    PortableServer::POA_var poa = PortableServer::POA::_narrow(obj);
 
     // Вариант 1
-    Server* server = new Server();
+
+    Server *server = new Server();
+  //  Server* server = new Server();
     CORBA::Object_var ns_obj = orb->resolve_initial_references("NameService");
     if (!CORBA::is_nil(ns_obj))
     {
        CosNaming::NamingContext_ptr nc = CosNaming::NamingContext::_narrow(ns_obj);
        CosNaming::Name name;
        name.length(1);
-       // name[0].id = CORBA::string_dup(SERVER_NAME);
        name[0].id = CORBA::string_dup("echo_s");
        name[0].kind = CORBA::string_dup("");
        nc->rebind(name, server->_this());

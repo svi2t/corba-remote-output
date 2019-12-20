@@ -9,7 +9,8 @@ class Server : public POA_Example::Echo
 public:
   inline Server() :qcout(stdout) {}
   virtual ~Server() {}
-  virtual unsigned int echoChar( unsigned int mesg);
+  virtual short setCodecForServer(int codec);
+  virtual short echoChar( unsigned int mesg);
 
   QTextStream qcout;
 };
