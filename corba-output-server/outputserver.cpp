@@ -9,21 +9,25 @@ OutputServer::OutputServer() :qcout(stdout)
   return;
 }
 
-short OutputServer::setRemoteCodec(int MiB)
+void OutputServer::printGreetingMessage()
 {
-  codecRemote = QTextCodec::codecForMib(MiB);
-  return 1;
+  qcout << codecLocal->fromUnicode("Сервер запущен. Ожидаем прием данных. "
+            "Для завершения нажмите <ctrl>+c\n");
+  qcout.flush();
+  return;
 }
 
-short OutputServer::echoChar(unsigned int charOutUInt)
+short OutputServer::echoChar(int codecRemote, unsigned int charOutUInt)
 {
+  // поскольку возможно подключение нескольких клиентов, codecRemote заранее устанавливать не получится
+  // (можно также хранить кодировки всех подключенных клиентов, потом соотносить)
   QChar charOut = charOutUInt;
   ba.clear();
   ba += charOut;
-  if (codecLocal->mibEnum() == codecRemote->mibEnum())
+  if (codecLocal->mibEnum() == codecRemote)
     qcout << ba;
   else
-    qcout << codecLocal->fromUnicode(codecRemote->toUnicode(ba));
+    qcout << codecLocal->fromUnicode(QTextCodec::codecForMib(codecRemote)->toUnicode(ba));
   qcout.flush();
   return 1;
 }

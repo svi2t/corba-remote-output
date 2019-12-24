@@ -5,13 +5,13 @@
 #include "../remote-print.hh"
 #include <QDebug>
 #include <QTextCodec>
-#include "../qaux.h"
+#include "remoteoutputclient.h"
 
 
 int main(int argc, char *argv[])
 {
   QCoreApplication a(argc, argv);
-  globalSetLocale();
+  setlocale(LC_ALL, "rus");
 
 
   try
@@ -33,34 +33,31 @@ int main(int argc, char *argv[])
     if (CORBA::is_nil(remoteServer))
     {
       qWarning() << "Can't narrow reference." << endl;
-      return 1;
+      return -1;
     }
-    short res = 88;
 
-    remoteServer->setRemoteCodec(QTextCodec::codecForLocale()->mibEnum());
-    res = remoteServer->echoChar(static_cast<unsigned int>('e'));
+    RemoteOutputClient outputClient(remoteServer);
+    outputClient.getCharsFromConsole();
 
     orb->destroy();
 
-    //QTimer::
-    return a.exec();
   }
   catch (CORBA::TRANSIENT&)
   {
-    qWarning() << toLocalCodec("Caught system exception TRANSIENT - unable to contact the server \n");
+    qWarning() << "Невозможно подключится к серверу\n";
   }
   catch (CORBA::SystemException& ex)
   {
-    qWarning() << toLocalCodec("Caught a CORBA::") << ex._name() << "\n";
+    qWarning() << "Возникла ошибка при работе с ORB. Системное исключение CORBA::" << ex._name() << "\n";
   }
   catch (CORBA::Exception& ex)
   {
-    qWarning() << toLocalCodec("Caught CORBA::Exception: ") << ex._name() << "\n";
+    qWarning() << "Возникла ошибка при работе с ORB. Исключение CORBA::" << ex._name() << "\n";
   }
   catch (...)
   {
-    qWarning() << toLocalCodec("Что-то пошло не так...\n");
+    qWarning() << "Возникла неопределенная ошибка.\n";
   }
 
-  return 1;
+  return 0;
 }

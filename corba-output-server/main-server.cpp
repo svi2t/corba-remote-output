@@ -3,7 +3,6 @@
 #include <omniORB4/CORBA.h>
 #include <omniORB4/Naming.hh>
 #include "../remote-print.hh"
-#include "../qaux.h"
 #include "outputserver.h"
 #include <QDebug>
 #include <QString>
@@ -11,7 +10,7 @@
 int main(int argc, char *argv[])
 {
   QCoreApplication a(argc, argv);
-  globalSetLocale();
+  setlocale(LC_ALL, "rus");
 
   try
   {
@@ -36,16 +35,21 @@ int main(int argc, char *argv[])
     PortableServer::POAManager_var pman = poa->the_POAManager();
     pman->activate();
 
+    server->printGreetingMessage();
     orb->run();
     orb->destroy();
   }
   catch (CORBA::SystemException& ex)
   {
-    qWarning() << toLocalCodec("Caught CORBA::") << ex._name() << "\n";
+     qWarning() << "Возникла ошибка при работе с ORB. Системное исключение CORBA::" << ex._name() << "\n";
   }
   catch (CORBA::Exception& ex)
   {
-    qWarning() << toLocalCodec("Caught CORBA::Exception: ") << ex._name() << "\n";
+    qWarning() << "Возникла ошибка при работе с ORB. Исключение CORBA::" << ex._name() << "\n";
+  }
+  catch (...)
+  {
+    qWarning() << "Возникла неопределенная ошибка.\n";
   }
   return 0;
 }

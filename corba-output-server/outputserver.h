@@ -10,12 +10,13 @@ class OutputServer : public POA_Example::Echo
 public:
   OutputServer();
   virtual ~OutputServer() {}
-  virtual short setRemoteCodec(int MiB);
-  virtual short echoChar(unsigned int mesg);
+  void printGreetingMessage();
+  virtual short echoChar(int codec, unsigned int mesg);
 
+private:
+  int codect;
   QTextStream qcout;
   QByteArray ba;
-  QTextCodec *codecRemote;
   QTextCodec *codecLocal;
 };
 

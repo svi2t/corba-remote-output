@@ -1,0 +1,11 @@
+module Example 
+{
+  interface Echo 
+  {
+    // для обеспечения совместимости с полным набором Unicode используем unsigned long,
+    // поскольку wchar в COBRA занимает всего 2 байта 
+    short echoChar(in long codec, in unsigned long mesg);
+  };
+};
+ 
+ 

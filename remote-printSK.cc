@@ -119,15 +119,15 @@ Example::_objref_Echo::_ptrToObjRef(const char* id)
 
 
 //
-// Code for Example::Echo::setRemoteCodec
+// Code for Example::Echo::echoChar
 
 // Proxy call descriptor class. Mangled signature:
-//  _cshort_i_clong
-class _0RL_cd_24c96c106ba79553_00000000
+//  _cshort_i_clong_i_cunsigned_plong
+class _0RL_cd_1f03eabd1a63181c_00000000
   : public omniCallDescriptor
 {
 public:
-  inline _0RL_cd_24c96c106ba79553_00000000(LocalCallFn lcfn, const char* op_, size_t oplen, _CORBA_Boolean upcall=0)
+  inline _0RL_cd_1f03eabd1a63181c_00000000(LocalCallFn lcfn, const char* op_, size_t oplen, _CORBA_Boolean upcall=0)
     : omniCallDescriptor(lcfn, op_, oplen, 0, _user_exns, 0, upcall)
   {
     
@@ -143,131 +143,56 @@ public:
   static const char* const _user_exns[];
 
   ::CORBA::Long arg_0;
+  ::CORBA::ULong arg_1;
   ::CORBA::Short result;
 };
 
-void _0RL_cd_24c96c106ba79553_00000000::marshalArguments(cdrStream& _n)
+void _0RL_cd_1f03eabd1a63181c_00000000::marshalArguments(cdrStream& _n)
 {
   arg_0 >>= _n;
+  arg_1 >>= _n;
 
 }
 
-void _0RL_cd_24c96c106ba79553_00000000::unmarshalArguments(cdrStream& _n)
+void _0RL_cd_1f03eabd1a63181c_00000000::unmarshalArguments(cdrStream& _n)
 {
   (::CORBA::Long&)arg_0 <<= _n;
+  (::CORBA::ULong&)arg_1 <<= _n;
 
 }
 
-void _0RL_cd_24c96c106ba79553_00000000::marshalReturnedValues(cdrStream& _n)
+void _0RL_cd_1f03eabd1a63181c_00000000::marshalReturnedValues(cdrStream& _n)
 {
   result >>= _n;
 
 }
 
-void _0RL_cd_24c96c106ba79553_00000000::unmarshalReturnedValues(cdrStream& _n)
+void _0RL_cd_1f03eabd1a63181c_00000000::unmarshalReturnedValues(cdrStream& _n)
 {
   (::CORBA::Short&)result <<= _n;
 
 }
 
-const char* const _0RL_cd_24c96c106ba79553_00000000::_user_exns[] = {
+const char* const _0RL_cd_1f03eabd1a63181c_00000000::_user_exns[] = {
   0
 };
 
 // Local call call-back function.
 static void
-_0RL_lcfn_24c96c106ba79553_10000000(omniCallDescriptor* cd, omniServant* svnt)
+_0RL_lcfn_1f03eabd1a63181c_10000000(omniCallDescriptor* cd, omniServant* svnt)
 {
-  _0RL_cd_24c96c106ba79553_00000000* tcd = (_0RL_cd_24c96c106ba79553_00000000*)cd;
+  _0RL_cd_1f03eabd1a63181c_00000000* tcd = (_0RL_cd_1f03eabd1a63181c_00000000*)cd;
   Example::_impl_Echo* impl = (Example::_impl_Echo*) svnt->_ptrToInterface(Example::Echo::_PD_repoId);
-  tcd->result = impl->setRemoteCodec(tcd->arg_0);
+  tcd->result = impl->echoChar(tcd->arg_0, tcd->arg_1);
 
 
 }
 
-::CORBA::Short Example::_objref_Echo::setRemoteCodec(::CORBA::Long codec)
+::CORBA::Short Example::_objref_Echo::echoChar(::CORBA::Long codec, ::CORBA::ULong mesg)
 {
-  _0RL_cd_24c96c106ba79553_00000000 _call_desc(_0RL_lcfn_24c96c106ba79553_10000000, "setRemoteCodec", 15);
+  _0RL_cd_1f03eabd1a63181c_00000000 _call_desc(_0RL_lcfn_1f03eabd1a63181c_10000000, "echoChar", 9);
   _call_desc.arg_0 = codec;
-
-  _invoke(_call_desc);
-  return _call_desc.result;
-
-
-}
-
-
-//
-// Code for Example::Echo::echoChar
-
-// Proxy call descriptor class. Mangled signature:
-//  _cshort_i_cunsigned_plong
-class _0RL_cd_24c96c106ba79553_20000000
-  : public omniCallDescriptor
-{
-public:
-  inline _0RL_cd_24c96c106ba79553_20000000(LocalCallFn lcfn, const char* op_, size_t oplen, _CORBA_Boolean upcall=0)
-    : omniCallDescriptor(lcfn, op_, oplen, 0, _user_exns, 0, upcall)
-  {
-    
-  }
-  
-  void marshalArguments(cdrStream&);
-  void unmarshalArguments(cdrStream&);
-
-  void unmarshalReturnedValues(cdrStream&);
-  void marshalReturnedValues(cdrStream&);
-  
-  
-  static const char* const _user_exns[];
-
-  ::CORBA::ULong arg_0;
-  ::CORBA::Short result;
-};
-
-void _0RL_cd_24c96c106ba79553_20000000::marshalArguments(cdrStream& _n)
-{
-  arg_0 >>= _n;
-
-}
-
-void _0RL_cd_24c96c106ba79553_20000000::unmarshalArguments(cdrStream& _n)
-{
-  (::CORBA::ULong&)arg_0 <<= _n;
-
-}
-
-void _0RL_cd_24c96c106ba79553_20000000::marshalReturnedValues(cdrStream& _n)
-{
-  result >>= _n;
-
-}
-
-void _0RL_cd_24c96c106ba79553_20000000::unmarshalReturnedValues(cdrStream& _n)
-{
-  (::CORBA::Short&)result <<= _n;
-
-}
-
-const char* const _0RL_cd_24c96c106ba79553_20000000::_user_exns[] = {
-  0
-};
-
-// Local call call-back function.
-static void
-_0RL_lcfn_24c96c106ba79553_30000000(omniCallDescriptor* cd, omniServant* svnt)
-{
-  _0RL_cd_24c96c106ba79553_20000000* tcd = (_0RL_cd_24c96c106ba79553_20000000*)cd;
-  Example::_impl_Echo* impl = (Example::_impl_Echo*) svnt->_ptrToInterface(Example::Echo::_PD_repoId);
-  tcd->result = impl->echoChar(tcd->arg_0);
-
-
-}
-
-::CORBA::Short Example::_objref_Echo::echoChar(::CORBA::ULong mesg)
-{
-  _0RL_cd_24c96c106ba79553_20000000 _call_desc(_0RL_lcfn_24c96c106ba79553_30000000, "echoChar", 9);
-  _call_desc.arg_0 = mesg;
+  _call_desc.arg_1 = mesg;
 
   _invoke(_call_desc);
   return _call_desc.result;
@@ -304,17 +229,9 @@ Example::_impl_Echo::_dispatch(omniCallHandle& _handle)
 {
   const char* op = _handle.operation_name();
 
-  if (omni::strMatch(op, "setRemoteCodec")) {
-
-    _0RL_cd_24c96c106ba79553_00000000 _call_desc(_0RL_lcfn_24c96c106ba79553_10000000, "setRemoteCodec", 15, 1);
-    
-    _handle.upcall(this,_call_desc);
-    return 1;
-  }
-
   if (omni::strMatch(op, "echoChar")) {
 
-    _0RL_cd_24c96c106ba79553_20000000 _call_desc(_0RL_lcfn_24c96c106ba79553_30000000, "echoChar", 9, 1);
+    _0RL_cd_1f03eabd1a63181c_00000000 _call_desc(_0RL_lcfn_1f03eabd1a63181c_10000000, "echoChar", 9, 1);
     
     _handle.upcall(this,_call_desc);
     return 1;

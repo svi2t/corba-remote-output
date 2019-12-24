@@ -9,15 +9,10 @@ class RemoteOutputClient : public QObject
   Q_OBJECT
 public:
   explicit RemoteOutputClient(::Example::Echo_var _remoteServer, QObject *parent = nullptr);
-
-signals:
-  void needNewCharInput();
-public slots:
-  void getNextCharInput();
-
+  void getCharsFromConsole();
 
 private:
-  void prepareCharInput();
+  void finishInputChar();
 
   ::Example::Echo_var remoteServer;
 };
