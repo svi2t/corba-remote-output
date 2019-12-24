@@ -1,10 +1,7 @@
-#include <QCoreApplication>
-#include <QTextStream>
+#include "pch.h"
 #include <omniORB4/CORBA.h>
 #include <omniORB4/Naming.hh>
 #include "../remote-print.hh"
-#include <QDebug>
-#include <QTextCodec>
 #include "remoteoutputclient.h"
 
 
@@ -13,6 +10,10 @@ int main(int argc, char *argv[])
   QCoreApplication a(argc, argv);
   setlocale(LC_ALL, "rus");
 
+  RemoteOutputClient outputClient(argc, argv);
+  QObject::connect(&outputClient, SIGNAL(finished()), &a, SLOT(quit()));
+  QTimer::singleShot(0, &outputClient, SLOT(startRemoteOutputClient()));
+  return a.exec();
 
   try
   {
@@ -36,8 +37,8 @@ int main(int argc, char *argv[])
       return -1;
     }
 
-    RemoteOutputClient outputClient(remoteServer);
-    outputClient.getCharsFromConsole();
+   // RemoteOutputClient outputClient(remoteServer);
+   // outputClient.getCharsFromConsole();
 
     orb->destroy();
 

@@ -1,9 +1,9 @@
 #ifndef OUTPUTSERVER_H
 #define OUTPUTSERVER_H
 
+#include "pch1.h"
 #include "../remote-print.hh"
-#include <QTextStream>
-#include <QTextCodec>
+
 
 class OutputServer : public POA_Example::Echo
 {

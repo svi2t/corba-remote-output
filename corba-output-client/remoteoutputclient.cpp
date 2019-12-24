@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "remoteoutputclient.h"
 #ifdef Q_OS_LINUX
 #include <ncursesw/ncurses.h>
@@ -5,18 +6,71 @@
 #ifdef Q_OS_WIN
 #include <conio.h>
 #endif
-#include <QTextCodec>
-#include <QString>
-#include <QDebug>
 
 #define CSTR(str) QString::fromUtf8(str).toLocal8Bit()
 
-RemoteOutputClient::RemoteOutputClient(::Example::Echo_var _remoteServer, QObject *parent) : QObject(parent)
+RemoteOutputClient::RemoteOutputClient(int argc, char *argv[], QObject *parent) : QObject(parent)
 {
-  remoteServer = _remoteServer;
+  orb = CORBA::ORB_init(argc, argv);
 }
 
-void RemoteOutputClient::getCharsFromConsole()
+RemoteOutputClient::~RemoteOutputClient()
+{
+  orb->destroy();
+}
+
+void RemoteOutputClient::startRemoteOutputClient()
+{
+  if (setupClient())
+    getCharsFromConsole();
+  emit finished();
+}
+
+bool RemoteOutputClient::setupClient()
+{
+  try
+  {
+    rootContextObj = orb->resolve_initial_references("NameService");
+    nc = CosNaming::NamingContext::_narrow(rootContextObj.in());
+
+    CosNaming::Name name;
+    name.length(1);
+    name[0].id = CORBA::string_dup("echo_s");
+    name[0].kind = CORBA::string_dup("");
+    CORBA::Object_var managerObj = nc->resolve(name);
+
+    remoteServer = ::Example::Echo::_narrow(managerObj.in());
+
+    if (CORBA::is_nil(remoteServer))
+    {
+      qWarning() << "Can't narrow reference." << endl;
+      return false;
+    }
+    return true;
+  }
+  catch (CORBA::TRANSIENT&)
+  {
+    qWarning() << "Невозможно подключится к серверу\n";
+    return false;
+  }
+  catch (CORBA::SystemException& ex)
+  {
+    qWarning() << "Возникла ошибка при работе с ORB. Системное исключение CORBA::" << ex._name() << "\n";
+    return false;
+  }
+  catch (CORBA::Exception& ex)
+  {
+    qWarning() << "Возникла ошибка при работе с ORB. Исключение CORBA::" << ex._name() << "\n";
+    return false;
+  }
+  catch (...)
+  {
+    qWarning() << "Возникла неопределенная ошибка.\n";
+  }
+
+}
+
+bool RemoteOutputClient::getCharsFromConsole()
 {
   int currentCodec = QTextCodec::codecForLocale()->mibEnum();
   // QCoreApplication::processEvents() не получится здесь использовать,
@@ -63,7 +117,7 @@ void RemoteOutputClient::getCharsFromConsole()
   if (initscr() == nullptr)
   {
     qCritical() << "Невозможно войти в режим посимвольного считывания (ncurses)";
-    return;
+    return false;
   }
   timeout(-1);
   echo();
@@ -80,7 +134,7 @@ void RemoteOutputClient::getCharsFromConsole()
         if (c == 26 || c == 3)
         {
           finishInputChar();
-          return ;
+          return true;
         }
         if (c == '\n')
         {
@@ -107,29 +161,34 @@ void RemoteOutputClient::getCharsFromConsole()
   {
     finishInputChar();
     qWarning() << "Невозможно подключится к серверу\n";
+    return  false;
   }
   catch (CORBA::COMM_FAILURE& ex)
   {
     finishInputChar();
     qWarning() << "Связь с сервером потеряна" ;
+    return  false;
   }
   catch (CORBA::SystemException& ex)
   {
     finishInputChar();
     qWarning() << "Возникла ошибка при работе с ORB. Системное исключение CORBA::" << ex._name() << "\n";
+    return false;
   }
   catch (CORBA::Exception& ex)
   {
     finishInputChar();
     qWarning() << "Возникла ошибка при работе с ORB. Исключение CORBA::" << ex._name() << "\n";
+    return false;
   }
   catch (...)
   {
     finishInputChar();
     qWarning() << "Неопределенная ошибка\n";
+    return false;
   }
   finishInputChar();
-  return;
+  return true;
 }
 
 void RemoteOutputClient::finishInputChar()

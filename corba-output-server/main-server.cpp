@@ -1,16 +1,18 @@
-#include <QCoreApplication>
-#include <QTextStream>
-#include <omniORB4/CORBA.h>
-#include <omniORB4/Naming.hh>
+#include "pch1.h"
 #include "../remote-print.hh"
-#include "outputserver.h"
-#include <QDebug>
-#include <QString>
+#include "servermanager.h"
+
 
 int main(int argc, char *argv[])
 {
   QCoreApplication a(argc, argv);
   setlocale(LC_ALL, "rus");
+
+  ServerManager serverManager(argc, argv);
+
+  QObject::connect(&serverManager, SIGNAL(finished()), &a, SLOT(quit()));
+  QTimer::singleShot(0, &serverManager, SLOT(startManager()));
+  return a.exec();
 
   try
   {
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
   }
   catch (CORBA::SystemException& ex)
   {
-     qWarning() << "Возникла ошибка при работе с ORB. Системное исключение CORBA::" << ex._name() << "\n";
+    qWarning() << "Возникла ошибка при работе с ORB. Системное исключение CORBA::" << ex._name() << "\n";
   }
   catch (CORBA::Exception& ex)
   {

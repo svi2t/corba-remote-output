@@ -1,4 +1,5 @@
 #include "outputserver.h"
+#include "pch1.h"
 #include <iostream>
 #include <QString>
 #include <QByteArray>
