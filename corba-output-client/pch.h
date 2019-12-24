@@ -12,6 +12,8 @@
 #include <QObject>
 #include <QDebug>
 #include <QTextCodec>
+#include <omniORB4/CORBA.h>
+#include <omniORB4/Naming.hh>
 
 #endif // __cplusplus
 #endif // PCH_H

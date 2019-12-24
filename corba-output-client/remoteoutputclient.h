@@ -16,7 +16,6 @@ private:
   bool getCharsFromConsole();
   void finishInputChar();
 
-
   CORBA::ORB_var orb;
   CORBA::Object_var rootContextObj;
   CosNaming::NamingContext_var nc;

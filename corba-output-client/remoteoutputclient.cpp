@@ -50,7 +50,7 @@ bool RemoteOutputClient::setupClient()
   }
   catch (CORBA::TRANSIENT&)
   {
-    qWarning() << "Невозможно подключится к серверу\n";
+    qWarning() << "Невозможно подключиться к серверу\n";
     return false;
   }
   catch (CORBA::SystemException& ex)
@@ -66,6 +66,7 @@ bool RemoteOutputClient::setupClient()
   catch (...)
   {
     qWarning() << "Возникла неопределенная ошибка.\n";
+    return false;
   }
 
 }
@@ -74,7 +75,7 @@ bool RemoteOutputClient::getCharsFromConsole()
 {
   int currentCodec = QTextCodec::codecForLocale()->mibEnum();
   // QCoreApplication::processEvents() не получится здесь использовать,
-  // поскольку не совместим с режимом работы ncursesksys
+  // поскольку не совместим с режимом работы ncurses
 #ifdef Q_OS_WIN
   try
   {
