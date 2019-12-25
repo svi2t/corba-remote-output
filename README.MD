@@ -17,7 +17,10 @@
 omniNames -start 2000 
 ```
 (для Linux, в Windows - omniNames.exe).
-- Возможно понадобиться перекомпиляция интерфейсного файла remote-print.idl (особенно если используется отличающаяся версияя omniORB). Для этого введите в корневом каталоге проекта omniidl -bcxx remote-print.idl.
+- Возможно понадобится перекомпиляция интерфейсного файла remote-print.idl (особенно если используется отличающаяся версияя omniORB). Для этого введите в корневом каталоге проекта 
+```console
+  omniidl -bcxx remote-print.idl.
+```
 - Запустите серверную часть проекта corba-output-server с указанием параметров -ORBInitRef NameService=corbaloc:iiop:<ip-addr\>:<port\>/NameService , где вместо <ip-addr\> нужно указать IP адрес, а вместо <port\> указать порт. Например, 
 ```console 
 ./corba-output-server -ORBInitRef NameService=corbaloc:iiop:127.0.0.1:2000/NameService 
